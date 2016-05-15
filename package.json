@@ -12,7 +12,7 @@
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/tobich/watch-your-language#readme",
+  "homepage": "https://bitbucket.org/tobich/track-source#readme",
   "dependencies": {
     "babel-core": "^6.8.0"
   },
