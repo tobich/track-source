@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack && cp playground/index.html dist/ && cp node_modules/brace/theme/github.js dist/theme-github.js && cp node_modules/brace/mode/javascript.js dist/mode-javascript.js",
+    "build": "webpack && cp playground/index.html dist/ && cp node_modules/brace/theme/github.js dist/theme-github.js && cp node_modules/brace/mode/javascript.js dist/mode-javascript.js && cp playground/index.html dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "http-server ./dist"
   },
@@ -18,9 +18,11 @@
   "dependencies": {
     "babel-core": "^6.8.0",
     "http-server": "^0.9.0",
+    "material-ui": "^0.15.0",
     "react": "^15.1.0",
     "react-ace": "^3.4.1",
-    "react-dom": "^15.1.0"
+    "react-dom": "^15.1.0",
+    "react-tap-event-plugin": "^1.0.0"
   },
   "devDependencies": {
     "babel-loader": "^6.2.4",

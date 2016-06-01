@@ -1,6 +1,14 @@
 import React from 'react';
 import Ace from 'react-ace';
 import ReactDOM from 'react-dom';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import RaisedButton from 'material-ui/RaisedButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
+
 
 const babel = require('babel-core');
 import plugin from '../lib/plugin';
@@ -16,23 +24,17 @@ function transpile(source) {
 }
 
 const style = {
-    button1: {
-        margin: 10,
-        border: '1px solid darkgreen',
-        background: 'green'
+    'console': {
+        position: 'fixed',
+        width: '100%',
+        height: '33vh',
+        bottom: 0,
+        zIndex: 999,
+        background: 'white'
     }
 };
 
 let events = [];
-
-function heartBeat() {
-    if(events.length>0) {
-        const newEvent = events.shift();
-        newEvent();
-    }
-    setTimeout(heartBeat, 250);
-}
-setTimeout(heartBeat, 0);
 
 class Playground extends React.Component {
     constructor(props) {
@@ -42,43 +44,81 @@ class Playground extends React.Component {
         }
     }
 
+    heartBeat() {
+        if (events.length > 0) {
+            const newEvent = events.shift();
+            newEvent();
+        } else {
+            if(this.markerId) {
+                this.refs.editor.editor.session.removeMarker(this.markerId);
+                this.markerId = null;
+            }
+        }
+        setTimeout(this.heartBeat.bind(this), 100);
+    }
+
     runCode(code) {
         events = [];
         const __track__ = (start, end, line) => {
             events.push(function () {
-                if(this.markerId) {
+                if (this.markerId) {
                     this.refs.editor.editor.session.removeMarker(this.markerId);
                 }
-                this.markerId = this.refs.editor.editor.session.addMarker(new Range(line-1,0,line-1,100), 'ace_selection', 'fullLine');
+                this.markerId = this.refs.editor.editor.session.addMarker(new Range(line - 1, 0, line - 1, 100), 'ace_selection', 'fullLine');
             }.bind(this));
         };
         let compiledCode;
         try {
             compiledCode = transpile(code);
+        } catch(err) {
+            return;
+        }
+        try {
             eval(compiledCode);
-        } catch (err) {}
+        } catch (err) {
+        }
+
+        this.setState({
+            code
+        });
     }
 
     onChange(code) {
         events = [];
         this.runCode(code);
-        this.setState({
-            code
-        });
     }
 
     componentDidMount() {
         this.editor = ReactDOM.findDOMNode(this.refs.editor);
         this.editor.focus();
         this.runCode(this.state.code);
+        this.heartBeat();
     }
 
     render() {
         return (
-            <div>
-                <Ace ref="editor" value={this.state.code} mode="javascript" theme="github" onChange={this.onChange.bind(this)}/>
-                <div style={style.button1} id="button1">Button1 1</div>
-            </div>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div>
+                    <Tabs>
+                        <Tab label="Source">
+                            <Ace ref="editor"
+                                 value={this.state.code}
+                                 mode="javascript"
+                                 theme="github"
+                                 onChange={this.onChange.bind(this)}
+                                 width="100%"
+                                 height="100vh"
+                            />
+                        </Tab>
+                        <Tab label="Target">
+                            <pre>{transpile(this.state.code)}</pre>
+                        </Tab>
+                    </Tabs>
+                    <div style={style.console}>
+                        <RaisedButton label="Button 1" secondary="{true}" id="button1"/>
+                    </div>
+                </div>
+            </MuiThemeProvider>
         );
     }
 }
