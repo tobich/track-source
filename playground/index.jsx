@@ -54,7 +54,7 @@ class Playground extends React.Component {
                 this.markerId = null;
             }
         }
-        setTimeout(this.heartBeat.bind(this), 100);
+        setTimeout(this.heartBeat.bind(this), 200);
     }
 
     runCode(code) {

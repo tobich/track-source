@@ -1,15 +1,19 @@
-function rolloverHandler(event) {
-    let x = 0;
-    for(let i=0; i<15; i++) {
+function doSomething(x) {
+    for(let i=0; i<7; i++) {
         if(i % 3 === 0) {
             x += i;
             x += 1;
-            x += 2;
-            x += 3;
         } else {
             x++;
         }
     }
+}
+
+function rolloverHandler(event) {
+    for(let i=0; i<10; i++) {
+        doSomething(i);
+    }
+
 }
 
 window.myHandler && document.querySelector('#button1').removeEventListener('click', window.myHandler);

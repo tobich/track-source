@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack && cp playground/index.html dist/ && cp node_modules/brace/theme/github.js dist/theme-github.js && cp node_modules/brace/mode/javascript.js dist/mode-javascript.js && cp playground/index.html dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server ./dist"
+    "build": "webpack && cp playground/index.html dist/ && cp playground/brace/github.js dist/theme-github.js && cp playground/brace/javascript.js dist/mode-javascript.js",
+    "test": "mocha",
+    "start": "npm run build && http-server ./dist -p 8086"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   "homepage": "https://bitbucket.org/tobich/track-source#readme",
   "dependencies": {
     "babel-core": "^6.8.0",
+    "brace": "^0.8.0",
     "http-server": "^0.9.0",
     "material-ui": "^0.15.0",
     "react": "^15.1.0",
