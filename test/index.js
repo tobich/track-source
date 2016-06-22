@@ -10,10 +10,11 @@ function transpile(source) {
 
 
 function createTracker(source) {
+    const sourceLines = source.split('\n');
     const calls = [];
     return {
-        __track__(start, end) {
-            calls.push(source.slice(start,end));
+        __track__(line) {
+            calls.push(sourceLines[line-1].trim());
         },
 
         getCalls() {
@@ -25,8 +26,8 @@ function createTracker(source) {
 
 describe('Transpiler', function () {
     it('creates self-tracking code', function () {
-        const source = `
-            const a = 1;
+        const source =
+           `const a = 1;
             if(a === 0) {
                 console.log('This should be omitted...');
             } else {
@@ -42,8 +43,8 @@ describe('Transpiler', function () {
         eval(modifiedSource);
         expect(tracker.getCalls()).to.eql([
             'const a = 1;',
-            'if(a === 0)',
-            'for(i=0;i<5;i++)',
+            'if(a === 0) {',
+            'for(i=0;i<5;i++) {',
             'console.log(i);',
             'console.log(i);',
             'console.log(i);',

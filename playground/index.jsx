@@ -59,7 +59,7 @@ class Playground extends React.Component {
 
     runCode(code) {
         events = [];
-        const __track__ = (start, end, line) => {
+        const __track__ = line => {
             events.push(function () {
                 if (this.markerId) {
                     this.refs.editor.editor.session.removeMarker(this.markerId);
@@ -111,7 +111,7 @@ class Playground extends React.Component {
                             />
                         </Tab>
                         <Tab label="Target">
-                            <pre>{transpile(this.state.code)}</pre>
+                            <pre>{transpile(this.state.code).replace(/\n+/g, '\n')}</pre>
                         </Tab>
                     </Tabs>
                     <div style={style.console}>
