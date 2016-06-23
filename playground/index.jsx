@@ -27,10 +27,15 @@ const style = {
     'console': {
         position: 'fixed',
         width: '100%',
-        height: '33vh',
+        padding: '35px',
         bottom: 0,
         zIndex: 999,
         background: 'white'
+    },
+    'code': {
+        fontFamily: 'monaco',
+        fontSize: 12,
+        marginLeft: 48
     }
 };
 
@@ -111,7 +116,7 @@ class Playground extends React.Component {
                             />
                         </Tab>
                         <Tab label="Target">
-                            <pre>{transpile(this.state.code).replace(/\n+/g, '\n')}</pre>
+                            <pre style={style.code}>{transpile(this.state.code).replace(/\n+/g, '\n')}</pre>
                         </Tab>
                     </Tabs>
                     <div style={style.console}>
